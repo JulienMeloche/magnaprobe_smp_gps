@@ -17,7 +17,7 @@ Both tools support Emlid Post-Processed Kinematic (PPK) and NRCan Precise Point 
 
 #### 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/gps-snow-matching.git
+git clone https://github.com/JulienMeloche/gps-snow-matching.git
 cd gps-snow-matching
 ```
 
