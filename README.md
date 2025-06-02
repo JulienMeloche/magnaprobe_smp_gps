@@ -17,8 +17,8 @@ Both tools support Emlid Post-Processed Kinematic (PPK) and NRCan Precise Point 
 
 #### 1. Clone the repository:
 ```bash
-git clone https://github.com/JulienMeloche/gps-snow-matching.git
-cd gps-snow-matching
+git clone https://github.com/JulienMeloche/magnaprobe_smp_gps.git
+cd magnaprobe_smp_gps
 ```
 
 install packages for smp:
