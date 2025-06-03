@@ -58,12 +58,12 @@ Corrects GPS coordinates for Magnaprobe snow depth measurements using high-preci
 
 #### Basic PPK correction:
 ```bash
-python magnaprobe_gps_matching.py -m "data/magnaprobe_20231215.dat" -p "data/emlid_20231215.pos" -n "output/corrected_magnaprobe.csv" -c "PPK_correction"
+python run_magna_gps_matching.py -m "data/magnaprobe_20231215.dat" -p "data/emlid_20231215.pos" -n "output/corrected_magnaprobe.csv" -c "PPK_correction"
 ```
 
 #### PPP correction with full paths:
 ```bash
-python magnaprobe_gps_matching.py --filemagna "/home/user/field_data/magnaprobe..dat" --filepos "/home/user/gps_data/emlid.pos" --newfile "/home/user/analysis/corrected.csv" --correction "PPP_correction"
+python runmagna_gps_matching.py --filemagna "/home/user/field_data/magnaprobe.dat" --filepos "/home/user/gps_data/emlid.pos" --newfile "/home/user/analysis/corrected.csv" --correction "PPP_correction"
 ```
 
 ### Input File Requirements
@@ -94,12 +94,12 @@ Matches Snow Micro Penetrometer measurements with high-precision GPS coordinates
 
 #### Process SMP files with PPK correction:
 ```bash
-python smp_gps_matching.py -d "field_data/smp_measurements/" -p "gps_data/emlid_correction.pos" -e "analysis/smp_records.xlsx" -c "PPK_correction"
+python run_smp_gps_matching.py -d "field_data/smp_measurements/" -p "gps_data/emlid_correction.pos" -e "analysis/smp_records.xlsx" -c "PPK_correction"
 ```
 
 #### Windows example:
 ```cmd
-python smp_gps_matching.py -d "C:\Data\SMP_Files" -p "C:\GPS\emlid.pos" -e "C:\Analysis\measurements.xlsx" -c "PPP_correction"
+python run_smp_gps_matching.py -d "C:\Data\SMP_Files" -p "C:\GPS\emlid.pos" -e "C:\Analysis\measurements.xlsx" -c "PPP_correction"
 ```
 
 ### Input File Requirements
