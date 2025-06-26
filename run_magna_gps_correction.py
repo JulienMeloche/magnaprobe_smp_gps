@@ -76,7 +76,8 @@ def timestamp_magna(str_datetime, thisUTCtime):
     strtime = thisUTCtime[:2] + ':' + thisUTCtime[2:4] + ':' + thisUTCtime[4:]
     #extract date for Datetime
     date = pd.to_datetime(str_datetime, format= 'ISO8601').date()
-    return pd.to_datetime(date.strftime('%Y-%m-%d') + 'T' + strtime)
+    #add 18 seconds to utc time to match GPS time, recheck if the leap seconds is still 18 seconds (2024)
+    return pd.to_datetime(date.strftime('%Y-%m-%d') + 'T' + strtime) + pd.Timedelta(seconds = 18)
 
 
 def get_lat_emlid(timestamp_magna, df_emlid):
@@ -167,6 +168,7 @@ def magnaprobe_get_gps_correction(path_magna, path_emlid, output_csv_name, corre
         df_emlid = df_emlid.loc[:,['YEAR-MM-DD', 'HR:MN:SS.SS','LATDD', 'LATMN', 'LATSS','LONDD', 'LONMN', 'LONSS']]
         df_emlid['lat'] = df_emlid.apply(lambda x : degree_dms2dec(x.LATDD, x.LATMN, x.LATSS), axis = 1)
         df_emlid['lon'] = df_emlid.apply(lambda x : degree_dms2dec(x.LONDD, x.LONMN, x.LONSS), axis = 1)
+        #convert date and time to timestamp
         df_emlid['timestamp'] = df_emlid.apply(lambda x: row_to_time(x['YEAR-MM-DD'], x['HR:MN:SS.SS']), axis = 1)
 
     else:

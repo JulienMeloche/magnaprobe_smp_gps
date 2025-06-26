@@ -57,25 +57,25 @@ def row_to_time(date_str, time_str):
     time = parse(time_str)
     return pd.to_datetime(date.strftime('%Y-%m-%d') + 'T' + time.strftime('%H:%M:%S'))
 
-def timestamp_magna(str_datetime, thisUTCtime):
-    """
-    Convert magnaprobe datetime and UTC time into a standardized timestamp.
+# def timestamp_magna(str_datetime, thisUTCtime):
+#     """
+#     Convert magnaprobe datetime and UTC time into a standardized timestamp.
     
-    The magnaprobe logs time in a compressed format (HHMMSS) that needs to be 
-    combined with the date from the Campbell logger to create a proper timestamp.
+#     The magnaprobe logs time in a compressed format (HHMMSS) that needs to be 
+#     combined with the date from the Campbell logger to create a proper timestamp.
     
-    Args:
-        str_datetime (str): Datetime string from Campbell logger (ISO8601 format)
-        thisUTCtime (str): UTC time from GPS in format 'HHMMSS' (e.g., '171119' for 17:11:19)
+#     Args:
+#         str_datetime (str): Datetime string from Campbell logger (ISO8601 format)
+#         thisUTCtime (str): UTC time from GPS in format 'HHMMSS' (e.g., '171119' for 17:11:19)
     
-    Returns:
-        pd.Timestamp: Properly formatted timestamp combining date and UTC time
-    """
-    #modify format of time
-    strtime = thisUTCtime[:2] + ':' + thisUTCtime[2:4] + ':' + thisUTCtime[4:]
-    #extract date for Datetime
-    date = pd.to_datetime(str_datetime, format= 'ISO8601').date()
-    return pd.to_datetime(date.strftime('%Y-%m-%d') + 'T' + strtime)
+#     Returns:
+#         pd.Timestamp: Properly formatted timestamp combining date and UTC time
+#     """
+#     #modify format of time
+#     strtime = thisUTCtime[:2] + ':' + thisUTCtime[2:4] + ':' + thisUTCtime[4:]
+#     #extract date for Datetime
+#     date = pd.to_datetime(str_datetime, format= 'ISO8601').date()
+#     return pd.to_datetime(date.strftime('%Y-%m-%d') + 'T' + strtime)
 
 
 def get_lat_emlid(timestamp_magna, df_emlid):
@@ -173,7 +173,8 @@ def smp_get_gps_correction(path_smp_dir, path_emlid, output_csv_file, correction
                 lat, lon = coord
             else:
                 lat, lon = None, None
-            smp_df.append({'name' : file, 'timestamp' : pd.Timestamp(p.timestamp).tz_convert(None), 'lat' : lat, 'lon' : lon})
+            #add 18 seconds to utc time to match GPS time, recheck if the leap seconds is still 18 seconds (2024)
+            smp_df.append({'name' : file, 'timestamp' : pd.Timestamp(p.timestamp).tz_convert(None) + pd.Timedelta(seconds = 18), 'lat' : lat, 'lon' : lon})
 
     smp_df = pd.DataFrame(smp_df)
 
@@ -191,6 +192,7 @@ def smp_get_gps_correction(path_smp_dir, path_emlid, output_csv_file, correction
         df_emlid = df_emlid.loc[:,['YEAR-MM-DD', 'HR:MN:SS.SS','LATDD', 'LATMN', 'LATSS','LONDD', 'LONMN', 'LONSS']]
         df_emlid['lat'] = df_emlid.apply(lambda x : degree_dms2dec(x.LATDD, x.LATMN, x.LATSS), axis = 1)
         df_emlid['lon'] = df_emlid.apply(lambda x : degree_dms2dec(x.LONDD, x.LONMN, x.LONSS), axis = 1)
+        #convert date and time to timestamp
         df_emlid['timestamp'] = df_emlid.apply(lambda x: row_to_time(x['YEAR-MM-DD'], x['HR:MN:SS.SS']), axis = 1)
 
     else:
